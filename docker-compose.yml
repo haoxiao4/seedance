@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  seedance-web:
+    build: .
+    container_name: seedance-web
+    ports:
+      - "8000:8000"
+    environment:
+      # 访问密码（必需，请修改）
+      - ACCESS_PASSWORD=${ACCESS_PASSWORD:-seedance2024}
+
+      # 数据库路径
+      - DB_PATH=/app/data/tasks.db
+
+      # Seedance API 配置（必需）
+      - ARK_API_KEY=${ARK_API_KEY}
+      - ARK_BASE_URL=${ARK_BASE_URL:-https://ark.cn-beijing.volces.com/api/v3}
+
+      # 腾讯云 COS 配置（必需）
+      - COS_REGION=${COS_REGION:-ap-guangzhou}
+      - COS_BUCKET_NAME=${COS_BUCKET_NAME}
+      - COS_ACCESS_KEY_ID=${COS_ACCESS_KEY_ID}
+      - COS_ACCESS_KEY_SECRET=${COS_ACCESS_KEY_SECRET}
+      - COS_DOMAIN=${COS_DOMAIN}
+    volumes:
+      # 持久化数据库
+      - ./data:/app/data
+    restart: unless-stopped
