@@ -8,7 +8,6 @@ Seedance 图生视频 Web 应用 - 极简版
 import os
 import json
 import uuid
-import hashlib
 import threading
 import sqlite3
 import time
@@ -19,9 +18,8 @@ from contextlib import contextmanager
 from dataclasses import dataclass, asdict
 
 import requests
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends, Request
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 # 从现有文件导入
@@ -56,6 +54,9 @@ def get_db():
     try:
         yield conn
         conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
     finally:
         conn.close()
 
@@ -298,7 +299,7 @@ app = FastAPI(title="Seedance Web", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -11,7 +11,7 @@
 import os
 import time
 import requests
-from typing import Optional, Literal, Dict, Any
+from typing import Optional, Literal, Dict, Any, Callable
 from dataclasses import dataclass
 
 
@@ -279,7 +279,7 @@ class SeedanceClient:
         task_id: str,
         poll_interval: int = 5,
         max_attempts: int = 60,
-        callback: Optional[callable] = None,
+        callback: Optional[Callable] = None,
     ) -> VideoTaskResult:
         """
         轮询等待任务完成
